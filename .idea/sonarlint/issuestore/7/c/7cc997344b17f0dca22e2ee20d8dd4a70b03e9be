@@ -1,0 +1,20 @@
+
+ 
+java:S1130"~Remove the declaration of thrown exception 'org.json.simple.parser.ParseException', as it cannot be thrown from method's body.( äöÛùÿÿÿÿ8ì¯Èû¾1
+X	java:S125"<This block of commented-out lines of code should be removed.(©¦±û8Œ§¿û¾1
+c
+java:S1075 "ARefactor your code to get this URI from a customizable parameter.(õ…èùÿÿÿÿ8§¿û¾1
+E
+java:S1128"(Remove this unused import 'client.Task'.(ÜÍ‘8ô¯Èû¾1
+l
+java:S1128"JRemove this unused import 'com.fasterxml.jackson.core.type.TypeReference'.(ãĞß¤ÿÿÿÿÿ8õ¯Èû¾1
+e
+java:S1128"HRemove this unused import 'com.fasterxml.jackson.databind.ObjectMapper'.(´‘¨™8õ¯Èû¾1
+Y
+java:S1128"7Remove this unused import 'org.json.simple.JSONObject'.(‚ƒç‘ÿÿÿÿÿ8õ¯Èû¾1
+[
+java:S1128">Remove this unused import 'org.json.simple.parser.JSONParser'.(õø²¹8õ¯Èû¾1
+M
+java:S1128"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ8õ¯Èû¾1
+G
+java:S1128"*Remove this unused import 'server.Record'.(¯ øº8õ¯Èû¾1

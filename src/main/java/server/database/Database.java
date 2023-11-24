@@ -1,14 +1,11 @@
 package server.database;
 
 import com.google.gson.JsonElement;
-import server.Response;
-
-import java.util.Optional;
 
 public interface Database {
-    Response set(JsonElement key, JsonElement message);
-    Response get(JsonElement key);
-    Response delete(JsonElement key);
+    void set(JsonElement key, JsonElement message);
+    JsonElement get(JsonElement key);
+    void delete(JsonElement key);
 
-    Response exit();
+
 }

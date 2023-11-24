@@ -3,6 +3,7 @@ package client;
 import com.beust.jcommander.Parameter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import exceptions.ExceptionHandler;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,7 +31,7 @@ public class Task {
                 return readFromFile(System.getProperty("user.dir") + "/src/client/data/"+file);
 
             }catch (IOException e) {
-                System.out.println("Cannot read file: " + e.getMessage());
+                throw new ExceptionHandler("Cannot read file: " + e.getMessage());
             }
         }
         Gson gson = new GsonBuilder().create();

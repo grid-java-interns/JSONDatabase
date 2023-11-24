@@ -1,7 +1,6 @@
 package server.command;
 
 import com.google.gson.JsonElement;
-import server.Response;
 import server.database.Database;
 
 
@@ -15,7 +14,7 @@ public class DeleteCommand implements Command{
 
 
     @Override
-    public Response execute() {
-        return database.delete(key);
+    public void execute() {
+        database.delete(key);
     }
 }

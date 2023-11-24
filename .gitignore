@@ -8,6 +8,15 @@ target/
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
+.idea/$PROJECT_FILE$
+.idea/.gitignore
+.idea/encodings.xml
+.idea/misc.xml
+.idea/qaplug_profiles.xml
+.idea/sonarlint
+
+.idea/uiDesigner.xml
+
 *.iws
 *.iml
 *.ipr

@@ -1,7 +1,6 @@
 package server.command;
 
 import com.google.gson.JsonElement;
-import server.Response;
 import server.database.Database;
 
 
@@ -20,7 +19,7 @@ public class SetCommand implements Command{
 
     }
     @Override
-    public Response execute() {
-        return database.set(key,message);
+    public void execute() {
+        database.set(key,message);
     }
 }

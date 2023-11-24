@@ -1,11 +1,13 @@
 package server;
 
-import client.ExceptionHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import exceptions.ExceptionHandler;
+import io.Logger;
 import server.command.CommandController;
 import server.database.Database;
 import server.database.JSONDatabase;
+import server.model.Response;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -22,10 +24,12 @@ public class ServerSession {
     private final ExecutorService executor;
     private final Database database;
     private ServerSocket server;
+    private final Logger logger;
 
     public ServerSession(String filePath){
         this.executor = Executors.newCachedThreadPool();
         this.database = new JSONDatabase(filePath);
+        this.logger =new Logger();
     }
     public void start(){
 
@@ -34,18 +38,18 @@ public class ServerSession {
 
             while (!exit){
                 Socket socket = server.accept();
-                System.out.println("Server started!");
+                logger.write("Server started!");
                 executor.submit(()->{
                     try{
                         DataInputStream input = new DataInputStream(socket.getInputStream());
                         DataOutputStream output = new DataOutputStream(socket.getOutputStream());
                         String msg = input.readUTF();
-                        System.out.println("Received: " + msg);
+                        logger.write("Received: " + msg);
                         CommandController command = new Gson().fromJson(msg,CommandController.class);
                         Response response = command.execute(database,this);
                         String responseText = new GsonBuilder().create().toJson(response);
                         output.writeUTF(responseText);
-                        System.out.println("Sent: " + responseText);
+                        logger.write("Sent: " + responseText);
                     }catch(IOException e){
                         throw new ExceptionHandler("Server exception", e);
                     }
@@ -53,7 +57,7 @@ public class ServerSession {
             }
 
         } catch (IOException e) {
-            throw new ExceptionHandler("Server exception", e);
+            throw new ExceptionHandler("Server Exception", e);
         }
 
     }
@@ -64,7 +68,7 @@ public class ServerSession {
         try {
             server.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ExceptionHandler("Sever Closing Exception", e);
         }
         Response response = new Response();
         response.setResponse("OK");

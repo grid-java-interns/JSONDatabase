@@ -1,4 +1,4 @@
-package server;
+package io;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -32,7 +32,7 @@ public class FileOperator {
                 String content = new String(Files.readAllBytes(Path.of(filename)));
                 database = new Gson().fromJson(content, JsonArray.class);
             } else {
-                Files.createFile(Path.of(filename));
+                //Files.createFile(Path.of(filename));
                 database = new JsonArray();
 
             }

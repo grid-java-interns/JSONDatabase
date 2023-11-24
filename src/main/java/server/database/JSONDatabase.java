@@ -3,12 +3,10 @@ package server.database;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import server.FileOperator;
-import server.Record;
-import server.Response;
+import io.FileOperator;
+import exceptions.*;
 
 import java.util.Iterator;
-import java.util.List;
 
 
 public class JSONDatabase implements Database {
@@ -17,8 +15,7 @@ public class JSONDatabase implements Database {
 
     private FileOperator databaseFile;
 
-    private static final String ERROR = "ERROR";
-    private static final String OK = "OK";
+
 
     public JSONDatabase(String filePath) {
 
@@ -26,8 +23,7 @@ public class JSONDatabase implements Database {
         database = databaseFile.read();
     }
 
-    public Response set(JsonElement key, JsonElement message) {
-        Response res = new Response();
+    public void set(JsonElement key, JsonElement message) {
         if (key.isJsonPrimitive()) {
             JsonObject keyValue = new JsonObject();
             keyValue.add(key.getAsString(), message);
@@ -37,19 +33,15 @@ public class JSONDatabase implements Database {
             String toAdd = keys.remove(keys.size() - 1).getAsString();
             findElement(keys, true).getAsJsonObject().add(toAdd, message);
         } else {
-            res.setResponse(ERROR);
-            res.setReason("No such key");
-            return res;
+            throw new NoSuchKeyException();
         }
 
         databaseFile.save(database);
-        res.setResponse(OK);
-        return res;
+
     }
 
 
-    public Response delete(JsonElement key) {
-        Response res = new Response();
+    public void delete(JsonElement key) {
         if (key.isJsonPrimitive()) {
             String keyToDelete = key.getAsString();
             Iterator<JsonElement> iterator = database.iterator();
@@ -64,18 +56,14 @@ public class JSONDatabase implements Database {
             String toRemove = keys.remove(keys.size() - 1).getAsString();
             findElement(keys, false).getAsJsonObject().remove(toRemove);
         } else {
-            res.setResponse(ERROR);
-            res.setReason("Invalid key format");
-            return res;
+            throw new InvaildKeyFormatException();
         }
 
         databaseFile.save(database);
-        res.setResponse(OK);
-        return res;
+
     }
 
-    public Response get(JsonElement key) {
-        Response response = new Response();
+    public JsonElement get(JsonElement key) {
         JsonElement elem = null;
 
         if (key.isJsonPrimitive()) {
@@ -89,27 +77,16 @@ public class JSONDatabase implements Database {
         } else if (key.isJsonArray()) {
             elem = findElement(key.getAsJsonArray(), false);
         } else {
-            response.setResponse(ERROR);
-            response.setReason("Invalid key format");
-            return response;
+            throw new InvaildKeyFormatException();
         }
 
         if (elem == null) {
-            response.setResponse(ERROR);
-            response.setReason("No such key");
-        } else {
-            response.setResponse(OK);
-            response.setValue(elem);
+            throw new NoSuchKeyException();
         }
-
-        return response;
+        return elem;
     }
 
-    public Response exit() {
-        Response response = new Response();
-        response.setResponse(OK);
-        return response;
-    }
+
 
     public JsonElement findElement(JsonArray keys, boolean isSet) {
         JsonElement tmp = database;

@@ -28,8 +28,9 @@ public class CommandController{
                 command = new DeleteCommand(database,key);
                 command.execute();
             }else if ("exit".equals(type)) {
-
-                return server.close();
+                server.close();
+            }else{
+                throw new InvaildKeyFormatException();
             }
 
             response.setResponse(OK);

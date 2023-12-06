@@ -7,22 +7,23 @@ import java.net.Socket;
 
 import exceptions.ExceptionHandler;
 import io.Logger;
+import socket.SocketConfig;
 
 public class ClientSession {
     private final String message;
     private final Logger logger;
-    public ClientSession(String message){
+    private final SocketConfig socketConfig;
+    public ClientSession(String message, SocketConfig socketConfig){
         this.message = message;
         this.logger = new Logger();
+        this.socketConfig = socketConfig;
+
     }
-
     public void start(){
-
-        int port = 23457;
-        String address = "127.0.0.1";
-        try (Socket socket = new Socket(address, port)){
+        try {
+            Socket socket = socketConfig.createSocket();
             logger.write("Client started!");
-            DataInputStream input = new DataInputStream(socket.getInputStream());
+            DataInputStream input = socketConfig.createInputStream(socket);
             DataOutputStream output = new DataOutputStream(socket.getOutputStream());
             output.writeUTF(message);
             logger.write("Sent: "  + message);

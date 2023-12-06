@@ -10,19 +10,12 @@ import java.util.Iterator;
 
 
 public class JSONDatabase implements Database {
-
     private JsonArray database;
-
     private FileOperator databaseFile;
-
-
-
-    public JSONDatabase(String filePath) {
-
-        databaseFile = new FileOperator(filePath);
-        database = databaseFile.read();
+    public JSONDatabase(FileOperator databaseFile) {
+        this.databaseFile = databaseFile;
+        this.database = databaseFile.read();
     }
-
     public void set(JsonElement key, JsonElement message) {
         if (key.isJsonPrimitive()) {
             JsonObject keyValue = new JsonObject();
@@ -35,12 +28,8 @@ public class JSONDatabase implements Database {
         } else {
             throw new NoSuchKeyException();
         }
-
         databaseFile.save(database);
-
     }
-
-
     public void delete(JsonElement key) {
         if (key.isJsonPrimitive()) {
             String keyToDelete = key.getAsString();
@@ -87,42 +76,47 @@ public class JSONDatabase implements Database {
     }
 
 
-
     public JsonElement findElement(JsonArray keys, boolean isSet) {
         JsonElement tmp = database;
 
         for (JsonElement key : keys) {
             if (!key.isJsonPrimitive()) {
-                throw new IllegalArgumentException("Invalid key format");
+                throw new InvaildKeyFormatException();
             }
 
             String keyToFind = key.getAsString();
-
-            boolean found = false;
-            if (tmp.isJsonArray()) {
-                for (JsonElement entry : tmp.getAsJsonArray()) {
-                    if (entry.isJsonObject() && entry.getAsJsonObject().has(keyToFind)) {
-                        tmp = entry.getAsJsonObject().get(keyToFind);
-                        found = true;
-                        break;
-                    }
-                }
-            } else if (tmp.isJsonObject() && tmp.getAsJsonObject().has(keyToFind)) {
-                tmp = tmp.getAsJsonObject().get(keyToFind);
-                found = true;
-            }
-
-            if (!found && isSet) {
-                JsonObject newObject = new JsonObject();
-                tmp.getAsJsonArray().add(newObject);
-                tmp = newObject;
-            } else if (!found) {
-                return null;  // Key not found
-            }
+            tmp = searchForKey(tmp, keyToFind, isSet);
         }
 
         return tmp;
     }
+
+    private JsonElement  searchForKey(JsonElement tmp, String keyToFind, boolean isSet) {
+        boolean found = false;
+        if (tmp.isJsonArray()) {
+            for (JsonElement entry : tmp.getAsJsonArray()) {
+                if (entry.isJsonObject() && entry.getAsJsonObject().has(keyToFind)) {
+                    tmp = entry.getAsJsonObject().get(keyToFind);
+                    found = true;
+                    break;
+                }
+            }
+        } else if (tmp.isJsonObject() && tmp.getAsJsonObject().has(keyToFind)) {
+            tmp = tmp.getAsJsonObject().get(keyToFind);
+            found = true;
+        }
+
+        if (!found && isSet) {
+            JsonObject newObject = new JsonObject();
+            tmp.getAsJsonArray().add(newObject);
+            tmp = newObject;
+        } else if (!found) {
+            return null;  // Key not found
+        }
+
+        return tmp;
+    }
+
 }
 
 

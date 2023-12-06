@@ -38,7 +38,7 @@ class FileOperatorTest {
     @Test
     void testReadNonexistentFile() {
         // Arrange
-        String filename = "nonexistent-file.json";
+        String filename = "src/test/resources/nonexistent-file.json";
         FileOperator fileOperator = new FileOperator(filename);
 
         // Act
@@ -51,7 +51,7 @@ class FileOperatorTest {
 
     @Test
     void save() {
-        String filename = "test-save-file.json";
+        String filename = "src/test/resources/test-save-file.json";
         FileOperator fileOperator = new FileOperator(filename);
         JsonArray testData = new JsonArray();
         testData.add(new JsonPrimitive("test data"));

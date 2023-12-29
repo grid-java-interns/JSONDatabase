@@ -25,17 +25,25 @@ public class ServerSession {
 
     boolean exit =false;
     private SocketConfig socketConfig;
-    ExecutorService executor;
-    private final Database database;
+    private final ExecutorService executor;
+    private Database database;
     private ServerSocket server;
-    private final Logger logger;
+    private Logger logger;
 
-    public ServerSession(String filePath, SocketConfig socketConfig){
+ /*   public ServerSession(String filePath, SocketConfig socketConfig){
         this.executor = Executors.newCachedThreadPool();
         this.database = new JSONDatabase(new FileOperator(filePath));
         this.logger =new Logger();
         this.socketConfig = socketConfig;
+    }*/
+
+    public ServerSession(String fileName,SocketConfig socketConfig) {
+        this.executor = Executors.newCachedThreadPool();
+        this.database = new JSONDatabase(new FileOperator(fileName));
+        this.logger =new Logger();
+        this.socketConfig = socketConfig;
     }
+
     public void start(){
 
         try{

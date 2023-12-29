@@ -10,7 +10,7 @@ public class Main {
         Task task = new Task();
         JCommander.newBuilder().addObject(task).build().parse(args);
         SocketConfig socketConfig = new SocketConfig();
-        ClientSession clientSession = new ClientSession("{\"type\":\"exit\"}", socketConfig);
+        ClientSession clientSession = new ClientSession(task.toJson(), socketConfig);
         clientSession.start();
     }
 }
